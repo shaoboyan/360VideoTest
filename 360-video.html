@@ -1,0 +1,114 @@
+<!doctype html>
+<!--
+Copyright 2017 The Chromium Authors. All rights reserved.
+Use of this source code is governed by a BSD-style license that can be
+found in the LICENSE file.
+-->
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Origin Trial Token, feature = WebVR (For Chrome M59+), origin = https://webvr.info, expires = 2017-07-21 -->
+    <meta http-equiv="origin-trial" data-feature="WebVR (For Chrome M59+)" data-expires="2017-07-21" content="AtJLsI9hT0/XyPU7DEDDxER7jyMU1oNeMk4diF9djsHCkwjulNzizKykf+CKW11B6+0ABoazxbd13jMxBvnUTQIAAABfeyJvcmlnaW4iOiJodHRwczovL3dlYnZyLmluZm86NDQzIiwiZmVhdHVyZSI6IldlYlZSMS4xIiwiZXhwaXJ5IjoxNTAwNjc3MDE3LCJpc1N1YmRvbWFpbiI6dHJ1ZX0=">
+
+    <title>XX - 360 Video</title>
+    <style type="text/css">
+.div-hmd
+{
+  float: left;
+  width:33%;
+  background-color:red;
+}
+.div-polyfill
+{
+  float: left;
+  width:33%;
+  background-color:green;
+}
+.div-plain
+{
+  float: left;
+  width:33%;
+  background-color:blue;
+}
+    </style>
+
+  </head>
+  <body>
+    <div class='div-hmd'>
+      <div>
+        <p>HMD</p>
+        <p>H.264</p>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/h264-1920x1080-60fps.mp4'}">h264-1080P</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/h264-3840x2160-60fps-360.mp4'}">h264-4k</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/h264-7680x4320-60fps-360.mp4'}">h264-8k</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/h264-7680x4320-30fps.mp4'}">h264-8k-30fps</button>
+      </div>
+        <p>------------------</p>
+      <div>
+        <p>VP8</p>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/vp8-1920x1080-60fps.webm'}">vp8-1080P</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/vp8-3840x2160-60fps.webm'}">vp8-4k</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/vp8-7680x4320-60fps.webm'}">vp8-8k</button>
+      </div>
+        <p>------------------</p>
+      <div>
+        <p>VP9</p>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/vp9-1920x1080-60fps.webm'}">vp9-1080P</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/vp9-3840x2160-60fps.webm'}">vp9-4k</button>
+        <button onclick="{location.href='XX-360-video.html?enablePerformanceMonitoring=true&videoUrl=./media/video/vp9-7680x4320-60fps.webm'}">vp9-8k</button>
+      </div>
+    </div>
+    <div class='div-polyfill'>
+      <div>
+        <p>Polyfill</p>
+        <p>H.264</p>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/h264-1920x1080-60fps.mp4'}">h264-1080P</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/h264-3840x2160-60fps-360.mp4'}">h264-4k</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/h264-7680x4320-60fps-360.mp4'}">h264-8k</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/h264-7680x4320-30fps.mp4'}">h264-8k-30fps</button>
+      </div>
+        <p>------------------</p>
+      <div>
+        <p>VP8</p>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/vp8-1920x1080-60fps.webm'}">vp8-1080P</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/vp8-3840x2160-60fps.webm'}">vp8-4k</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/vp8-7680x4320-60fps.webm'}">vp8-8k</button>
+      </div>
+        <p>------------------</p>
+      <div>
+        <p>VP9</p>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/vp9-1920x1080-60fps.webm'}">vp9-1080P</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/vp9-3840x2160-60fps.webm'}">vp9-4k</button>
+        <button onclick="{location.href='XX-360-video-polyfill.html?polyfill=1&enablePerformanceMonitoring=true&videoUrl=./media/video/vp9-7680x4320-60fps.webm'}">vp9-8k</button>
+      </div>
+    </div>
+    <div class='div-plain'>
+      <div>
+        <p>Plain</p>
+        <p>H.264</p>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/h264-1920x1080-60fps.mp4'}">h264-1080P</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/h264-3840x2160-60fps-360.mp4'}">h264-4k</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/h264-7680x4320-60fps-360.mp4'}">h264-8k</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/h264-7680x4320-30fps.mp4'}">h264-8k-30fps</button>
+      </div>
+        <p>------------------</p>
+      <div>
+        <p>VP8</p>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/vp8-1920x1080-60fps.webm'}">vp8-1080P</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/vp8-3840x2160-60fps.webm'}">vp8-4k</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/vp8-7680x4320-60fps.webm'}">vp8-8k</button>
+      </div>
+        <p>------------------</p>
+      <div>
+        <p>VP9</p>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/vp9-1920x1080-60fps.webm'}">vp9-1080P</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/vp9-3840x2160-60fps.webm'}">vp9-4k</button>
+        <button onclick="{location.href='360-video-plain.html?videoUrl=./media/video/vp9-7680x4320-60fps.webm'}">vp9-8k</button>
+      </div>
+    </div>
+  </body>
+</html>

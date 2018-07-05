@@ -1,0 +1,20 @@
+Put video resoure in this folder, names are:
+
+h264-1920x1080-60fps.mp4 => h264-1080P
+h264-3840x2160-60fps-360.mp4 => h264-4k
+h264-7680x4320-60fps-360.mp4 => h264-8k
+h264-7680x4320-30fps.mp4 => h264-8k-30fps
+
+
+
+
+vp8-1920x1080-60fps.webm => vp8-1080P
+vp8-3840x2160-60fps.webm => vp8-4k
+vp8-7680x4320-60fps.webm => vp8-8k
+
+
+
+
+vp9-1920x1080-60fps.webm => vp9-1080P
+vp9-3840x2160-60fps.webm => vp9-4k
+vp9-7680x4320-60fps.webm => vp9-8k
