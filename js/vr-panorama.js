@@ -32,9 +32,10 @@ window.VRPanorama = (function () {
 
   var Panorama = function (gl) {
     this.gl = gl;
+	
+	this.ext = gl.getExtension('WEBGL_video_texture');
 
     this.texture = gl.createTexture();
-
     this.program = new WGLUProgram(gl);
     this.program.attachShaderSource(panoVS, gl.VERTEX_SHADER);
     this.program.attachShaderSource(panoFS, gl.FRAGMENT_SHADER);
@@ -129,12 +130,16 @@ window.VRPanorama = (function () {
     });
   };
 
-  Panorama.prototype.setVideo = function (url) {
+  Panorama.prototype.setVideo = function (url, enable_sharing_video) {
     var gl = this.gl;
     var self = this;
 
     return new Promise(function(resolve, reject) {
       var video = document.createElement('video');
+      if (enable_sharing_video) {
+        var ext = gl.getExtension('WEBGL_video_texture');
+      }
+
       video.addEventListener('canplay', function() {
         // Added "click to play" UI?
       });
@@ -142,14 +147,23 @@ window.VRPanorama = (function () {
       video.addEventListener('playing', function() {
         self.videoElement = video;
         self.imgElement = null;
+        
+        if (!enable_sharing_video) {
+          gl.bindTexture(gl.TEXTURE_2D, self.texture);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, self.videoElement);
 
-        gl.bindTexture(gl.TEXTURE_2D, self.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, self.videoElement);
-
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+          gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        } else {
+		  this.ext = gl.getExtension('WEBGL_video_texture');
+          if (this.ext !== null) {
+            gl.bindTexture(this.ext.TEXTURE_VIDEO_IMAGE, self.texture);
+            ext.VideoElementTargetVideoTexture(ext.TEXTURE_VIDEO_IMAGE, video);
+            gl.bindTexture(this.ext.TEXTURE_VIDEO_IMAGE, null);
+          }
+        }
 
         resolve(self.videoElement);
       });
@@ -194,7 +208,7 @@ window.VRPanorama = (function () {
     return false;
   };
 
-  Panorama.prototype.render = function (projectionMat, modelViewMat) {
+  Panorama.prototype.render = function (projectionMat, modelViewMat, enable_sharing_video) {
     var gl = this.gl;
     var program = this.program;
 
@@ -217,11 +231,20 @@ window.VRPanorama = (function () {
 
     gl.activeTexture(gl.TEXTURE0);
     gl.uniform1i(this.program.uniform.diffuse, 0);
-    gl.bindTexture(gl.TEXTURE_2D, this.texture);
+	if (!enable_sharing_video) {
+      gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
-    if (this.videoElement && !this.videoElement.paused) {
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, this.videoElement);
-    }
+      if (this.videoElement && !this.videoElement.paused) {
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.videoElement);
+      }
+	} else {
+	  gl.bindTexture(this.ext.TEXTURE_VIDEO_IMAGE, this.texture);
+	  
+	  if (this.videoElement && !this.videoElement.paused && this.ext !== null) {
+	    this.ext.VideoElementTargetVideoTexture(this.ext.TEXTURE_VIDEO_IMAGE, this.videoElement);
+	  }
+	}
+	
 
     gl.drawElements(gl.TRIANGLES, this.indexCount, gl.UNSIGNED_SHORT, 0);
   };

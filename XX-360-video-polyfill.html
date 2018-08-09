@@ -92,6 +92,8 @@ found in the LICENSE file.
       var gl = null;
       var panorama = null;
       var stats = null;
+      var ext = null; 
+	  var enable_webgl_sharing_texture = false;
 
       function init (preserveDrawingBuffer) {
         var glAttribs = {
@@ -100,22 +102,23 @@ found in the LICENSE file.
           preserveDrawingBuffer: preserveDrawingBuffer
         };
         gl = webglCanvas.getContext("webgl", glAttribs);
-        if (!gl) {
-          gl = webglCanvas.getContext("experimental-webgl", glAttribs);
           if (!gl) {
-            VRSamplesUtil.addError("Your browser does not support WebGL.");
-            return;
+            gl = webglCanvas.getContext("experimental-webgl", glAttribs);
+            if (!gl) {
+              VRSamplesUtil.addError("Your browser does not support WebGL.");
+              return;
+            }
           }
-        }
+
         gl.enable(gl.DEPTH_TEST);
         gl.enable(gl.CULL_FACE);
 
         panorama = new VRPanorama(gl);
-
+        enable_webgl_sharing_texture = WGLUUrl.getBool('enableWebGLSharingTexture', false);
         var defaultVideo = "media/textures/pano.webm";
         var videoUrl = WGLUUrl.getString(
             'videoUrl', defaultVideo);
-        panorama.setVideo(videoUrl).catch(
+        panorama.setVideo(videoUrl, enable_webgl_sharing_texture).catch(
             function(error) {
               if (error instanceof MediaError && error.code === 4) {
                 panorama.setVideo(defaultVideo);
@@ -125,7 +128,8 @@ found in the LICENSE file.
         var enablePerformanceMonitoring = WGLUUrl.getBool(
             'enablePerformanceMonitoring', false);
         stats = new WGLUStats(gl, enablePerformanceMonitoring);
-
+		
+       
         // Wait until we have a WebGL context to resize and start rendering.
         window.addEventListener("resize", onResize, false);
         onResize();
@@ -231,9 +235,9 @@ found in the LICENSE file.
       }
 
       function onAnimationFrame (t) {
-        stats.begin();
+        //stats.begin();
 
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
 
         if (vrDisplay) {
           vrDisplay.requestAnimationFrame(onAnimationFrame);
@@ -245,20 +249,20 @@ found in the LICENSE file.
           // ball, which is usually not the desired effect. Instead, render both
           // eyes from a single viewpoint.
           //getPoseMatrix(viewMat, frameData.pose);
-
+		  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
           if (!vrDisplay.isPresenting) {
             gl.viewport(0, 0, webglCanvas.width * 0.5, webglCanvas.height);
-            panorama.render(frameData.leftProjectionMatrix, viewMat);
+            panorama.render(frameData.leftProjectionMatrix, viewMat, enable_webgl_sharing_texture);
 
             gl.viewport(webglCanvas.width * 0.5, 0, webglCanvas.width * 0.5, webglCanvas.height);
-            panorama.render(frameData.rightProjectionMatrix, viewMat);
+            panorama.render(frameData.rightProjectionMatrix, viewMat, enable_webgl_sharing_texture);
 
             vrDisplay.submitFrame();
           } else {
             gl.viewport(0, 0, webglCanvas.width, webglCanvas.height);
             mat4.perspective(projectionMat, Math.PI*0.4, webglCanvas.width / webglCanvas.height, 0.1, 1024.0);
-            panorama.render(projectionMat, viewMat);
-            stats.renderOrtho();
+            panorama.render(projectionMat, viewMat, enable_webgl_sharing_texture);
+            //stats.renderOrtho();
           }
         } else {
           window.requestAnimationFrame(onAnimationFrame);
@@ -267,12 +271,12 @@ found in the LICENSE file.
           gl.viewport(0, 0, webglCanvas.width, webglCanvas.height);
           mat4.perspective(projectionMat, Math.PI*0.4, webglCanvas.width / webglCanvas.height, 0.1, 1024.0);
           mat4.identity(viewMat);
-          panorama.render(projectionMat, viewMat);
+          panorama.render(projectionMat, viewMat, enable_webgl_sharing_texture);
 
-          stats.renderOrtho();
+          //stats.renderOrtho();
         }
 
-        stats.end();
+        //stats.end();
       }
       })();
     </script>
